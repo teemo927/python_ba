@@ -22,11 +22,16 @@ class MainSearch(object):
         solo_ba = 'http://weixin.sogou.com/weixin'
         url = solo_ba + name_id
         response = self.downloader.download(url)
-        p_lists, next_page, current_page = self.parser.parser_solo_ba(response)
+        a = self.parser.parser_solo_ba(response)
+        if a is None:
+            return
+        p_lists, next_page, current_page = a
 
         print('Page:', current_page, ', ListSize：', len(p_lists))
-        for p in p_lists:
-            self.process_article(p)
+        if len(p_lists) > 0:
+            for p in p_lists:
+                print(p)
+                self.process_article(p)
         if next_page is not None:
             self.process_page(next_page)
 
@@ -40,27 +45,26 @@ class MainSearch(object):
 
 
 def include_chinese(text):
-    if re.match('[\u4e00-\u9fa5]+', text):
+    if re.match('[\u4e00-\u9fa5]*', text):
         return True
     else:
         return False
 
 
 def filter_url(k):
-    result = ''
     if not include_chinese(k):
         result = '?type=2&query=' + k
         return result
 
     result = '?type=2&query='
     for k in kw:
-        temp = ''
         if include_chinese(k):
-            temp = quote(kw, safe='/:?=')
-            print('\n附加不转换字符参数：\n%s' % temp)
+            temp = quote(k, safe='/:?=')
+            result = result + temp
+            print(k, '\n附加不转换字符参数：\n%s' % temp)
         else:
             temp = k
-        result = result + temp
+            result = result + temp
     return result
 
 
