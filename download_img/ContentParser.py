@@ -26,6 +26,9 @@ class ContentParser(object):
     <i class="icon-top" alt="置顶" title="置顶"></i><i class="icon-good" alt="精品" title="精品"></i>
     <a href="/p/4982275764" title="希望这是很愉快的一年" target="_blank" class="j_th_tit ">希望这是很愉快的一年</a>
     </div>
+    <div class="threadlist_title pull_left j_th_tit  member_thread_title_frs ">
+        <a href="/p/5267439732" title="深夜寂寞有没有小哥哥一起来玩耍的啊" target="_blank" class="j_th_tit " clicked="true">深夜寂寞有没有小哥哥一起来玩耍的啊</a>
+    </div>
     2 下一页
     <div id="frs_list_pager" class="pagination-default clearfix"><span class="pagination-current pagination-item ">1</span>
     <a href="//tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&amp;ie=utf-8&amp;pn=50" class="next pagination-item ">下一页&gt;</a>
@@ -37,13 +40,26 @@ class ContentParser(object):
 
     def _get_solo_ba(self, soup):
         p_lists = []
+        tmp_lists = []
         current_page = soup.find('div', class_='pagination-default clearfix').find('span', class_='pagination-current pagination-item')
         next_page = soup.find('div', class_='pagination-default clearfix').find('a', class_='next pagination-item ').get('href')
         print('current page:', current_page, ',next_page:', next_page)
         all_p = soup.findAll('div', class_='threadlist_title pull_left j_th_tit ')
+        member_p = soup.findAll('div', class_='threadlist_title pull_left j_th_tit  member_thread_title_frs ')
         for a in all_p:
+            tmp_lists = []
             href = a.find('a').get('href')
-            p_lists.append(href)
+            title = a.find('a').get_text()
+            tmp_lists.append(title)
+            tmp_lists.append(href)
+            p_lists.append(tmp_lists)
+        for a in member_p:
+            tmp_lists = []
+            href = a.find('a').get('href')
+            title = a.find('a').get_text()
+            tmp_lists.append(title)
+            tmp_lists.append(href)
+            p_lists.append(tmp_lists)
 
         return p_lists, next_page, current_page
 
@@ -69,4 +85,6 @@ class ContentParser(object):
             name = link.split('/')
             big = base + (name[-1])
             big_urls.append(big)
+        small_urls.reverse()
+        big_urls.reverse()
         return small_urls, big_urls

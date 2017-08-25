@@ -14,6 +14,7 @@ class Main(object):
         self.manager = UrlManager()
         self.downloader = HttpDownloader()
         self.parser = ContentParser()
+        self.num = 1
 
     def process_solo(self, name_id):
         # https://tieba.baidu.com/f?kw=no
@@ -24,12 +25,14 @@ class Main(object):
 
         print('第', current_page, '页帖子：', p_lists)
         for p in p_lists:
-            self.process_p(p, name_id)
+            self.process_p(p[0], p[1], name_id)
+        if next_page is not None:
+            self.process_solo(next_page)
 
-    def process_p(self, short_url, ba_name):
-        # http://tieba.baidu.com/p/1165861759
+    def process_p(self, title, short_url, ba_name):
+        # http://tieba.baidu.com/p/5287680253
         base_url = 'http://tieba.baidu.com'
-        url = base_url + short_url
+        url = base_url + short_url +"?pn=" + str(self.num)
 
         self.manager.save_url(url)
         while self.manager.has_url():
@@ -39,7 +42,14 @@ class Main(object):
             new_img_urls, big_img_urls = self.parser.parser_detail_p(response)
 
             # 'http://imgsrc.baidu.com/forum/pic/item/'
-            self.downloader.load_imgs(big_img_urls, short_url, ba_name,  True)
+            self.downloader.load_imgs(big_img_urls, title, ba_name,  True)
+        self.num = self.num + 1
+
+        if self.num > 10:
+            self.num = 1
+            return
+        else:
+            self.process_p(title, short_url, ba_name)
 
 
 if __name__ == '__main__':
@@ -49,4 +59,4 @@ if __name__ == '__main__':
     main.process_solo(name_id)
 
     # name_id = input('请输入贴吧ID号（如：http://tieba.baidu.com/p/1165861759则输入1165861759）:')
-    # main.process_p("/p/"+ name_id)
+    # main.process_p("/p/"+ name_id,name_id)
