@@ -37,8 +37,6 @@ class HttpDownloader(object):
                 base = os.getcwd() + "\\py_downloads\\" + ba_name + '\\' + name + "\\small\\"
             if os.path.exists(base) is False:
                 os.makedirs(base)
-            else:
-                return
             link = str(url)
             name = link.split('/')
             path = base + name[-1]
