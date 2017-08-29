@@ -30,7 +30,6 @@ class MainSearch(object):
         print('Page:', current_page, ', ListSize：', len(p_lists))
         if len(p_lists) > 0:
             for p in p_lists:
-                print(p)
                 self.process_article(p)
         if next_page is not None:
             self.process_page(next_page)

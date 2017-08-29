@@ -27,14 +27,14 @@ class HttpDownloader(object):
         # 创建Request对象
         req = request.Request(url, headers=head)
 
-        # 这是代理IP
-        proxy = {'http': '139.196.176.18:9797'}
-        # 创建ProxyHandler
-        proxy_support = request.ProxyHandler(proxy)
-        # 创建Opener
-        opener = request.build_opener(proxy_support)
-        # 安装OPener
-        request.install_opener(opener)
+        # # 这是代理IP
+        # proxy = {'http': '139.196.176.18:9797'}
+        # # 创建ProxyHandler
+        # proxy_support = request.ProxyHandler(proxy)
+        # # 创建Opener
+        # opener = request.build_opener(proxy_support)
+        # # 安装OPener
+        # request.install_opener(opener)
 
         if url is None:
             return None

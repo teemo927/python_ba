@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import string
-import urllib.request
-import urllib.parse
-
 import os
+import urllib.parse
+import urllib.request
 from urllib.error import URLError
 
 
@@ -12,6 +10,7 @@ class HttpDownloader(object):
     def download(self, url):
         if url is None:
             return None
+        print(url)
         response = urllib.request.urlopen(url)
         if response.getcode() != 200:
             return None
@@ -54,3 +53,4 @@ class HttpDownloader(object):
             print(index, '、', path)
         except URLError as e:
             print(e)
+
