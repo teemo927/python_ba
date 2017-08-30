@@ -61,9 +61,11 @@ class Main(object):
 
 if __name__ == '__main__':
     main = Main()
-    name_id = input('请输入贴吧名字（如：https://tieba.baidu.com/f?ie=utf-8&kw=good  则输入 good）:')
-    solo_ba = '//tieba.baidu.com/f?kw='
-    main.process_solo(solo_ba + name_id, name_id)
-
-    # name_id = input('请输入贴吧ID号（如：http://tieba.baidu.com/p/1165861759则输入1165861759）:')
-    # main.process_p("/p/"+ name_id,name_id)
+    type = input('start type:')
+    if type == 1:
+        name_id = input('请输入贴吧名字（如：https://tieba.baidu.com/f?ie=utf-8&kw=good  则输入 good）:')
+        solo_ba = '//tieba.baidu.com/f?kw='
+        main.process_solo(solo_ba + name_id, name_id)
+    else:
+        name_id = input('请输入贴吧ID号（如：http://tieba.baidu.com/p/1165861759则输入1165861759）:')
+        main.process_p(name_id, "/p/" + name_id, str(name_id))

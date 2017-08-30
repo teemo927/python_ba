@@ -6,6 +6,7 @@ import random
 import string
 
 from PIL import Image, ImageSequence, ImageDraw, ImageFilter, ImageFont
+from pip.utils import logger
 
 """
 第 0000 题： 将你的 QQ 头像（或者微博头像）右上角加上红色的数字，类似于微信未读信息数量那种提示效果。 类似于图中效果
@@ -131,6 +132,7 @@ def create_codes():
         codes.append(result)
         img_random(result, file_address)
     print(codes)
+    logger.warning(codes)
 
 
 if __name__ == '__main__':
