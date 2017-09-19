@@ -4,6 +4,9 @@
 """
 爬取指定链接的图片 http://tieba.baidu.com/p/2166231880
 """
+import re
+from urllib import parse
+
 from ContentParser import ContentParser
 from HttpDownloader import HttpDownloader
 from UrlManager import UrlManager
@@ -16,10 +19,10 @@ class Main(object):
         self.parser = ContentParser()
         self.num = 1
 
-    def process_solo(self, name_id, fold):
+    def process_solo(self, name, fold):
         # next_page: //tieba.baidu.com/f?kw=%E5%A5%B3%E4%BA%BA&ie=utf-8&pn=50
-        solo_ba = 'https:'
-        url = solo_ba + name_id
+        ba = 'https:'
+        url = ba + name
 
         response = self.downloader.download(url)
         p_lists, next_page, current_page = self.parser.parser_solo_ba(response)
@@ -59,13 +62,35 @@ class Main(object):
                 self.process_p(title, short_url, ba_name)
 
 
+def checkChinese(name_id):
+    # %B5%D4%D0%C0%D0%C0&pn=30
+    result = ""
+    sss = name_id.split("&")
+    name_f = sss[0]
+    pattern = re.compile(u'[\u4e00-\u9fa5]')
+    for i in name_f:
+        print(i)
+        if pattern.match(i):
+            a = parse.quote(i)
+            print("tra--" + a)
+            result += a
+        else:
+            print(i)
+            result += i
+    if len(sss) > 1:
+        result += "&" + sss[1]
+    print(result)
+    return result, name_f
+
+
 if __name__ == '__main__':
     main = Main()
-    type = input('start type:')
-    if type == 1:
+    type_in = input('start type:')
+    if type_in == "1":
         name_id = input('请输入贴吧名字（如：https://tieba.baidu.com/f?ie=utf-8&kw=good  则输入 good）:')
+        name_url, name_fold = checkChinese(name_id)
         solo_ba = '//tieba.baidu.com/f?kw='
-        main.process_solo(solo_ba + name_id, name_id)
+        main.process_solo(solo_ba + name_url, name_fold)
     else:
         name_id = input('请输入贴吧ID号（如：http://tieba.baidu.com/p/1165861759则输入1165861759）:')
         main.process_p(name_id, "/p/" + name_id, str(name_id))
