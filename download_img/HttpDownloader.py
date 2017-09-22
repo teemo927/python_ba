@@ -5,16 +5,18 @@ import urllib.parse
 import urllib.request
 from urllib.error import URLError
 
+import requests
+
 
 class HttpDownloader(object):
     def download(self, url):
         if url is None:
             return None
         print(url)
-        response = urllib.request.urlopen(url)
-        if response.getcode() != 200:
+        response = requests.get(url)
+        if response.status_code != 200:
             return None
-        return response.read()
+        return response.text
 
     def load_imgs(self, img_urls, title, ba_name, big=False):
         if img_urls is None:
@@ -53,4 +55,3 @@ class HttpDownloader(object):
             print(index, '、', path)
         except URLError as e:
             print(e)
-

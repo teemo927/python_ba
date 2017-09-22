@@ -1,16 +1,13 @@
 import os
-from urllib import request
 
-from PIL import Image
 from bs4 import BeautifulSoup
 
-from Base_Downloader import downloader
+from BaseDownloader import downloader, BaseDownloader
 
 
 class mzitu():
-    def all_url(self, url):
+    def all_url(self, html):
 
-        html = downloader.get(url)
         all_a = BeautifulSoup(html.read(), 'lxml').find('div', class_='all').find_all('a')
         for a in all_a:
             title = a.get_text()
@@ -56,4 +53,9 @@ class mzitu():
 
 if __name__ == '__main__':
     Mzitu = mzitu()  # 实例化
-    Mzitu.all_url('http://www.mzitu.com/all')  # 给函数all_url传入参数  你可以当作启动爬虫（就是入口）
+
+    downloader = BaseDownloader()
+    url = 'http://www.mzitu.com/'
+    response = downloader.get(url)
+
+    Mzitu.all_url(response)  # 给函数all_url传入参数  你可以当作启动爬虫（就是入口）

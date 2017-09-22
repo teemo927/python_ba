@@ -85,7 +85,8 @@ def checkChinese(name_id):
 
 if __name__ == '__main__':
     main = Main()
-    type_in = input('start type:')
+    # type_in = input('start type:')
+    type_in = "1"
     if type_in == "1":
         name_id = input('请输入贴吧名字（如：https://tieba.baidu.com/f?ie=utf-8&kw=good  则输入 good）:')
         name_url, name_fold = checkChinese(name_id)
